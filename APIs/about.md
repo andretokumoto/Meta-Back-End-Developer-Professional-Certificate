@@ -1,0 +1,1 @@
+This course is part of the professional certification in backend development. It is focused on APIs, covering both theoretical and practical aspects.
