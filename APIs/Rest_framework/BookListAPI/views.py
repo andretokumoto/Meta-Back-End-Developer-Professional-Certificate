@@ -10,6 +10,13 @@ class Orders():
     def listOrders(request):
         return Response({'message': 'list of orders'}, status=status.HTTP_200_OK)
 
+class Books():
+    @staticmethod
+    @api_view(['GET','POST'])
+    def lisBooks(request):
+        return Response('list of the books',
+                    status=status.HTTP_200_OK)
+'''
 class BookView(viewsets.ViewSet):
     def list(self, request):
         return Response({"message": "All books"}, status=status.HTTP_200_OK)
@@ -28,3 +35,4 @@ class BookView(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         return Response({"message": "Deleting a book"}, status=status.HTTP_200_OK)
+'''
