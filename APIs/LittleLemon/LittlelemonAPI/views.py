@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, renderer_classes
 from .models import Menuitem
 from .serializers import MenuItemSerializar
+from django.core.paginator import Paginator, EmptyPage
 
 '''
 class RatingsView(View):
@@ -21,6 +22,8 @@ def menu_itens(request):
         to_price = request.query_params.get('to_price')
         search = request.query_params.get('search')
         ordering = request.query_params.get('ordering') 
+        perpage = request.query_params.get('perpage',default=2)
+        page = request.query_params.get('page',default=1)
         
         if category_name:
             itens = itens.filter(category__title=category_name)
@@ -31,6 +34,13 @@ def menu_itens(request):
         if ordering:
             ordering_fields = ordering.split(',')
             itens = itens.order_by(*ordering_fields)
+        
+        paginator = Paginator(itens,per_page=perpage)
+        try:
+            itens = paginator.page(number=page)
+        except EmptyPage:
+            itens = []
+        
         
         serialized_item = MenuItemSerializar(itens, many = True)
         return Response(serialized_item.data) 
