@@ -20,6 +20,7 @@ def menu_itens(request):
         category_name = request.query_params.get('category')
         to_price = request.query_params.get('to_price')
         search = request.query_params.get('search')
+        ordering = request.query_params.get('ordering') 
         
         if category_name:
             itens = itens.filter(category__title=category_name)
@@ -27,6 +28,9 @@ def menu_itens(request):
              itens = itens.filter(price__lte=to_price)
         if search:
              itens = itens.filter(title__startswich=search)
+        if ordering:
+            ordering_fields = ordering.split(',')
+            itens = itens.order_by(*ordering_fields)
         
         serialized_item = MenuItemSerializar(itens, many = True)
         return Response(serialized_item.data) 
