@@ -7,6 +7,8 @@ from rest_framework.decorators import api_view, renderer_classes
 from .models import Menuitem
 from .serializers import MenuItemSerializar
 from django.core.paginator import Paginator, EmptyPage
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
 '''
 class RatingsView(View):
@@ -51,8 +53,13 @@ def menu_itens(request):
         serialized_item.save()
         return Response(serialized_item.data, status.HTTP_201_CREATED)
 
-@api_view()
+@api_view(['GET','POST'])
 def single_item(request, id):
     item = get_object_or_404(Menuitem, pk=id)
     serialized_item = MenuItemSerializar(item)
     return Response(serialized_item.data)
+
+@api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
+def secret(request):
+    return Response({'mensage':'mensagem secreta'})
