@@ -12,5 +12,6 @@ urlpatterns = [
     path('manage-view/',views.manage_view),
     path('throttle-check/',views.throttle_check),
     path('throttle-check-auth/',views.throttle_check_auth),
+    path('groups/managers/users',views.managers)
     
 ]

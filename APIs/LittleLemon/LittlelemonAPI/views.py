@@ -7,9 +7,10 @@ from rest_framework.decorators import api_view, throttle_classes ,permission_cla
 from .models import Menuitem
 from .serializers import MenuItemSerializar
 from django.core.paginator import Paginator, EmptyPage
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from .throttles import TenCallPerMinute
+from django.contrib.auth.models import User,Group
 
 '''
 class RatingsView(View):
@@ -83,3 +84,23 @@ def throttle_check(request):
 @throttle_classes([TenCallPerMinute])
 def throttle_check_auth(request):
     return Response({'message':'só para usuarios'})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def me(request):
+    return Response({request.user.email})
+
+@api_view(['GET','POST'])
+@permission_classes([IsAdminUser])
+def managers(request):
+    username = request.data['username']
+    if username:
+        user = get_object_or_404(User, username=username)
+        managers = Group.objects.get(name='Administrador')
+        if request.method == 'POST':
+            managers.user_set.add(user)
+        elif request.method == 'DELETE':
+            managers.user_set.remove(user)
+        return Response({'message':'ok'})
+    
+    return Response({'message':'Erro'}, status.HTTP_400_BAD_REQUEST)
