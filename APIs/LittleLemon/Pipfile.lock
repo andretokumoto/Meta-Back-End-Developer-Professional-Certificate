@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e095c064c62cb06756e7bf9d94a445d708f337e95221f163d44e690b07bc38f2"
+            "sha256": "bad872dfd324f46835554909633419a9ec1c6beea4cfc8468a87310b3f4488b1"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -253,12 +253,12 @@
         },
         "django": {
             "hashes": [
-                "sha256:333a7988f7ca4bc14d360d3d8f6b793704517761ae3813b95432043daec22a45",
-                "sha256:ebe859c9da6fead9c9ee6dbfa4943b04f41342f4cea2c4d8c978ef0d10694f2b"
+                "sha256:848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d",
+                "sha256:d3b811bf5371a26def053d7ee42a9df1267ef7622323fe70a601936725aa4557"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==5.0.8"
+            "version": "==5.1"
         },
         "django-templated-mail": {
             "hashes": [
@@ -278,11 +278,12 @@
         },
         "djangorestframework-simplejwt": {
             "hashes": [
-                "sha256:381bc966aa46913905629d472cd72ad45faa265509764e20ffd440164c88d220",
-                "sha256:6c4bd37537440bc439564ebf7d6085e74c5411485197073f508ebdfa34bc9fae"
+                "sha256:1965246979f521c24a3be81d305c3df40bb564e136823868aebc1a1b16e51b8c",
+                "sha256:7613874c322a3f6e330cc118f9f00a3db957fea7f8e3bed81ba451853cd1dbd5"
             ],
-            "markers": "python_version >= '3.8'",
-            "version": "==5.3.1"
+            "index": "pypi",
+            "markers": "python_version >= '3.7'",
+            "version": "==5.2.1"
         },
         "djangorestframework-xml": {
             "hashes": [
@@ -356,6 +357,15 @@
             ],
             "markers": "python_version >= '3.4'",
             "version": "==2.0.0"
+        },
+        "setuptools": {
+            "hashes": [
+                "sha256:5a03e1860cf56bb6ef48ce186b0e557fdba433237481a9a625176c2831be15d1",
+                "sha256:8d243eff56d095e5817f796ede6ae32941278f542e0f941867cc05ae52b162ec"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==72.1.0"
         },
         "six": {
             "hashes": [

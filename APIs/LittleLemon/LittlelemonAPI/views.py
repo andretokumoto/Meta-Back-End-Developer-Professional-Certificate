@@ -3,10 +3,14 @@ from django.shortcuts import get_object_or_404
 #from django.views import View
 from rest_framework.response import Response
 from rest_framework import status,viewsets
-from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.decorators import api_view, throttle_classes ,permission_classes
 from .models import Menuitem
 from .serializers import MenuItemSerializar
 from django.core.paginator import Paginator, EmptyPage
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from .throttles import TenCallPerMinute
+from django.contrib.auth.models import User,Group
 
 '''
 class RatingsView(View):
@@ -51,8 +55,52 @@ def menu_itens(request):
         serialized_item.save()
         return Response(serialized_item.data, status.HTTP_201_CREATED)
 
-@api_view()
+@api_view(['GET','POST'])
 def single_item(request, id):
     item = get_object_or_404(Menuitem, pk=id)
     serialized_item = MenuItemSerializar(item)
     return Response(serialized_item.data)
+
+@api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
+def secret(request):
+    return Response({'mensage':'mensagem secreta'})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def manage_view(request):
+    if request.user.groups.filter(name='Administrador').exists():
+        return Response({'mensage':'Usuario Admin'})
+    else:
+         return Response({'mensage':'Usuario nao altorizado'})
+     
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_check(request):
+    return Response({'message':'sucesso'})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@throttle_classes([TenCallPerMinute])
+def throttle_check_auth(request):
+    return Response({'message':'só para usuarios'})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def me(request):
+    return Response({request.user.email})
+
+@api_view(['GET','POST'])
+@permission_classes([IsAdminUser])
+def managers(request):
+    username = request.data['username']
+    if username:
+        user = get_object_or_404(User, username=username)
+        managers = Group.objects.get(name='Administrador')
+        if request.method == 'POST':
+            managers.user_set.add(user)
+        elif request.method == 'DELETE':
+            managers.user_set.remove(user)
+        return Response({'message':'ok'})
+    
+    return Response({'message':'Erro'}, status.HTTP_400_BAD_REQUEST)

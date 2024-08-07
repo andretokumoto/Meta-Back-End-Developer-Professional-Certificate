@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,8 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'LittlelemonAPI',
 ]
+
+'''
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+'''
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,5 +137,26 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework_xml.renderers.XMLRenderer', 
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        
+    ),
+    'DEFAULT_THROTTLE_RATES':{
+        'anon':'2/minute',
+        'user':'5/minute',
+        'ten':'10/minute',
+    }
 }
+
+DJOSER = {
+    "USER_ID_FIELD":"username",
+}
+
+'''
+SiMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+}
+'''
