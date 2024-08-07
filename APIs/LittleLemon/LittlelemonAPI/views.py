@@ -63,3 +63,11 @@ def single_item(request, id):
 @permission_classes([IsAuthenticated])
 def secret(request):
     return Response({'mensage':'mensagem secreta'})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def manage_view(request):
+    if request.user.groups.filter(name='Administrador').exists():
+        return Response({'mensage':'Usuario Admin'})
+    else:
+         return Response({'mensage':'Usuario nao altorizado'})
