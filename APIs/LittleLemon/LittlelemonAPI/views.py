@@ -3,12 +3,13 @@ from django.shortcuts import get_object_or_404
 #from django.views import View
 from rest_framework.response import Response
 from rest_framework import status,viewsets
-from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.decorators import api_view, throttle_classes ,permission_classes
 from .models import Menuitem
 from .serializers import MenuItemSerializar
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from .throttles import TenCallPerMinute
 
 '''
 class RatingsView(View):
@@ -71,3 +72,14 @@ def manage_view(request):
         return Response({'mensage':'Usuario Admin'})
     else:
          return Response({'mensage':'Usuario nao altorizado'})
+     
+@api_view()
+@throttle_classes([AnonRateThrottle])
+def throttle_check(request):
+    return Response({'message':'sucesso'})
+
+@api_view()
+@permission_classes([IsAuthenticated])
+@throttle_classes([TenCallPerMinute])
+def throttle_check_auth(request):
+    return Response({'message':'só para usuarios'})
