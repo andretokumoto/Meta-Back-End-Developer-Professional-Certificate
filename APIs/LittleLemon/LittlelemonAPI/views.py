@@ -12,12 +12,6 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from .throttles import TenCallPerMinute
 from django.contrib.auth.models import User,Group
 
-'''
-class RatingsView(View):
-    def get(self, request):
-        return JsonResponse({'message': 'Ratings view'})
-'''
-
 @api_view(['GET','POST'])
 def menu_itens(request):
     if request.method == 'GET':
@@ -50,10 +44,12 @@ def menu_itens(request):
         return Response(serialized_item.data) 
     
     if request.method == 'POST':
-        serialized_item = MenuItemSerializar(data=request.data)
-        serialized_item.is_valid(raise_exception=True)
-        serialized_item.save()
-        return Response(serialized_item.data, status.HTTP_201_CREATED)
+        
+        if request.user.groups.filter(name='Administrador').exists():
+            serialized_item = MenuItemSerializar(data=request.data)
+            serialized_item.is_valid(raise_exception=True)
+            serialized_item.save()
+            return Response(serialized_item.data, status.HTTP_201_CREATED)
 
 @api_view(['GET','POST'])
 def single_item(request, id):
@@ -72,7 +68,7 @@ def manage_view(request):
     if request.user.groups.filter(name='Administrador').exists():
         return Response({'mensage':'Usuario Admin'})
     else:
-         return Response({'mensage':'Usuario nao altorizado'})
+         return Response({'mensage':'Usuario nao autorizado'})
      
 @api_view()
 @throttle_classes([AnonRateThrottle])
@@ -90,7 +86,7 @@ def throttle_check_auth(request):
 def me(request):
     return Response({request.user.email})
 
-@api_view(['GET','POST'])
+@api_view(['GET','POST','DELETE'])
 @permission_classes([IsAdminUser])
 def managers(request):
     username = request.data['username']
@@ -104,3 +100,10 @@ def managers(request):
         return Response({'message':'ok'})
     
     return Response({'message':'Erro'}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def user_register(request):
+    username = request.data['username']
+    password = request.data['password']
+    #CONTINUAR
+    return Response({'User created'},status.HTTP_201_CREATED)
