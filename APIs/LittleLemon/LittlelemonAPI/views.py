@@ -64,6 +64,7 @@ def single_item(request, id):
 def secret(request):
     return Response({'mensage':'mensagem secreta'})
 
+
 @api_view()
 @permission_classes([IsAuthenticated])
 def manage_view(request):
@@ -94,7 +95,7 @@ def managers(request):
     username = request.data['username']
     if username:
         user = get_object_or_404(User, username=username)
-        managers = Group.objects.get(name='Administrador')
+        managers = Group.objects.get(name='Manager')
         if request.method == 'POST':
             managers.user_set.add(user)
         elif request.method == 'DELETE':
@@ -105,14 +106,30 @@ def managers(request):
 
 @api_view(['GET','POST','DELETE'])
 @permission_classes([IsAdminUser])
+def delivery_crew(request):
+    if request.method == 'GET':
+        crew = Group.objects.get(name='Delivery')
+        return Response(crew.data)
+    else:
+        username = request.data['username']
+        if username:
+            user = get_object_or_404(User, username=username)
+            managers = Group.objects.get(name='Delivery')
+            if request.method == 'POST':
+                managers.user_set.add(user)
+            elif request.method == 'DELETE':
+                managers.user_set.remove(user)
+            return Response({'message':'ok'})
+        
+        
+    return Response({'message':'Erro'}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','POST','DELETE'])
+@permission_classes([IsAdminUser])
 def category_ctl(request,id):
     
     if request.method == 'GET':
         categories = Category.objects.all()
-        '''category_name = request.query_params.get('title')
-        category_slug = request.query_params.get('slug')
-        category_id = request.query_params.get('id')'''
-        
         serialized_category = CategorySerializer(categories, many = True)
         return Response(serialized_category.data) 
     
