@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view, throttle_classes ,permission_classes
 from .models import Menuitem, Category
-from .serializers import MenuItemSerializar,CategorySerializer
+from .serializers import MenuItemSerializar,CategorySerializer,UserSerializer
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -59,19 +59,14 @@ def single_item(request, id):
     serialized_item = MenuItemSerializar(item)
     return Response(serialized_item.data)
 
-@api_view(['GET','POST'])
-@permission_classes([IsAuthenticated])
-def secret(request):
-    return Response({'mensage':'mensagem secreta'})
 
-
-@api_view()
+'''@api_view()
 @permission_classes([IsAuthenticated])
 def manage_view(request):
     if request.user.groups.filter(name='Administrador').exists():
         return Response({'mensage':'Usuario Admin'})
     else:
-         return Response({'mensage':'Usuario nao autorizado'})
+         return Response({'mensage':'Usuario nao autorizado'})'''
      
 @api_view()
 @throttle_classes([AnonRateThrottle])
@@ -150,11 +145,10 @@ def category_ctl(request,id):
             return Response({'message': 'Category ID is required'}, status=status.HTTP_400_BAD_REQUEST)
         
     
-
-
 @api_view(['POST'])
 def user_register(request):
-    username = request.data['username']
-    password = request.data['password']
-    #CONTINUAR
-    return Response({'User created'},status.HTTP_201_CREATED)
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'User created'},status.HTTP_201_CREATED)
+    return Response({'message':"Error"},status.HTTP_400_BAD_REQUEST)

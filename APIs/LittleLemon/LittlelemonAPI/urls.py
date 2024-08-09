@@ -7,7 +7,6 @@ urlpatterns = [
     path('menu-item/',views.menu_itens),
     path('menu-item/<int:id>',views.single_item),
     path('api-token-auth/',obtain_auth_token),
-    path('manage-view/',views.manage_view),
     path('throttle-check/',views.throttle_check),
     path('throttle-check-auth/',views.throttle_check_auth),
     path('groups/managers/users',views.managers),
@@ -15,4 +14,5 @@ urlpatterns = [
     path('category/<int:id>',views.category_ctl),
     path('groups/delivery-crew/users',views.delivery_crew),
     path('groups/delivery-crew/users/<int:id>',views.delivery_crew),
+    path('register',views.user_register),
 ]
