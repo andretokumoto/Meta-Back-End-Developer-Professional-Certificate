@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view, throttle_classes ,permission_classes
-from .models import Menuitem
-from .serializers import MenuItemSerializar
+from .models import Menuitem, Category
+from .serializers import MenuItemSerializar,CategorySerializer
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -50,6 +50,8 @@ def menu_itens(request):
             serialized_item.is_valid(raise_exception=True)
             serialized_item.save()
             return Response(serialized_item.data, status.HTTP_201_CREATED)
+        
+        return Response({'message':'Only Admin'},status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET','POST'])
 def single_item(request, id):
@@ -100,6 +102,38 @@ def managers(request):
         return Response({'message':'ok'})
     
     return Response({'message':'Erro'}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','POST','DELETE'])
+@permission_classes([IsAdminUser])
+def category_ctl(request,id):
+    
+    if request.method == 'GET':
+        categories = Category.objects.all()
+        '''category_name = request.query_params.get('title')
+        category_slug = request.query_params.get('slug')
+        category_id = request.query_params.get('id')'''
+        
+        serialized_category = CategorySerializer(categories, many = True)
+        return Response(serialized_category.data) 
+    
+    if request.method == 'POST':
+        serialized_Category = CategorySerializer(data=request.data)
+        serialized_Category.is_valid(raise_exception=True)
+        serialized_Category.save()
+        return Response(serialized_Category.data, status.HTTP_201_CREATED)
+    
+    if request.method == 'DELETE':
+        
+        if id:
+                
+            category = get_object_or_404(Category, id=id)
+            category.delete()
+            return Response({'message':'Category deleted'},status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'message': 'Category ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+    
+
 
 @api_view(['POST'])
 def user_register(request):

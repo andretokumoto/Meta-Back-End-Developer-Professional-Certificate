@@ -12,8 +12,8 @@ class Category(models.Model):
 class Menuitem(models.Model):
     title = models.CharField(max_length=200, db_index=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, db_index=True)
-    #inventory = models.SmallIntegerField(db_index=True)
-    featured = models.BooleanField(db_index=True)
+    inventory = models.SmallIntegerField(db_index=True,default=0)
+    featured = models.BooleanField(db_index=True, default=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
     
 class Cart(models.Model):
