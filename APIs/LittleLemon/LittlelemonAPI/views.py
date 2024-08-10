@@ -147,8 +147,8 @@ def category_ctl(request,id):
     
 @api_view(['POST'])
 def user_register(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
+    user_serializer = UserSerializer(data=request.data)
+    if user_serializer.is_valid():
+        user_serializer.save()
         return Response({'User created'},status.HTTP_201_CREATED)
     return Response({'message':"Error"},status.HTTP_400_BAD_REQUEST)

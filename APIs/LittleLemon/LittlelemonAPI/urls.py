@@ -1,12 +1,13 @@
 from . import views
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
 #rotas
 urlpatterns = [
     path('menu-item/',views.menu_itens),
     path('menu-item/<int:id>',views.single_item),
-    path('api-token-auth/',obtain_auth_token),
+    #path('api-token-auth/',obtain_auth_token),
     path('throttle-check/',views.throttle_check),
     path('throttle-check-auth/',views.throttle_check_auth),
     path('groups/managers/users',views.managers),
@@ -15,4 +16,6 @@ urlpatterns = [
     path('groups/delivery-crew/users',views.delivery_crew),
     path('groups/delivery-crew/users/<int:id>',views.delivery_crew),
     path('register',views.user_register),
+    path('token/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

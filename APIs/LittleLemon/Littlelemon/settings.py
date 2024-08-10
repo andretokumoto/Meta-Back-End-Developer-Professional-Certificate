@@ -42,12 +42,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'LittlelemonAPI',
-]
-
-'''
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-'''
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -2,11 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-'''class User_model(models.Model):
-    username = models.CharField(max_length=255)
-    password = models.CharField(min_length=8)
-    email = models.CharField(max_length=110)'''
-
 class Category(models.Model):
     slug = models.SlugField()
     title = models.CharField(max_length=200, db_index=True)

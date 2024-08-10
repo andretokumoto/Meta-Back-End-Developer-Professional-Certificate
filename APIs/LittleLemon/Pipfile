@@ -9,7 +9,7 @@ djangorestframework = "*"
 djangorestframework-xml = "*"
 djoser = "*"
 bleach = "*"
-djangorestframework-simplejwt = "==5.2.1"
+djangorestframework-simplejwt = "*"
 setuptools = "*"
 
 [dev-packages]
