@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view, throttle_classes ,permission_classes
-from .models import Menuitem, Category
+from .models import Menuitem, Category , ItemOfDay
 from .serializers import MenuItemSerializar,CategorySerializer,UserSerializer
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -59,14 +59,14 @@ def single_item(request, id):
     serialized_item = MenuItemSerializar(item)
     return Response(serialized_item.data)
 
+@api_view(['GET','POST'])
+def item_of_day(request,id):
+    if request.method == 'GET':
+        item = get_object_or_404(ItemOfDay)
+        serialized_item = MenuItemSerializar(item)
+        return Response(serialized_item.data,status.HTTP_200_OK)
 
-'''@api_view()
-@permission_classes([IsAuthenticated])
-def manage_view(request):
-    if request.user.groups.filter(name='Administrador').exists():
-        return Response({'mensage':'Usuario Admin'})
-    else:
-         return Response({'mensage':'Usuario nao autorizado'})'''
+
      
 @api_view()
 @throttle_classes([AnonRateThrottle])

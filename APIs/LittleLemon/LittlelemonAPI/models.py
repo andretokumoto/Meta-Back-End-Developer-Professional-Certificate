@@ -15,6 +15,9 @@ class Menuitem(models.Model):
     inventory = models.SmallIntegerField(db_index=True,default=0)
     featured = models.BooleanField(db_index=True, default=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
+
+class ItemOfDay(models.Model):
+    item = models.ForeignKey(Menuitem ,on_delete=models.PROTECT, default=1)
     
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
