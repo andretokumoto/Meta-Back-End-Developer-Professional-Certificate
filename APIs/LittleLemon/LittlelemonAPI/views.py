@@ -209,7 +209,9 @@ def order_control(request,id):
             return Response(serialized_orders.data, status=status.HTTP_200_OK)
 
         elif request.user.groups.filter(name='Delivery').exists():
-            ...
+            orders = Order.objects.filter(delivery_crew=request.user)
+            serialized_orders = OrderSerializer(orders, many=True)
+            return Response(serialized_orders.data, status=status.HTTP_200_OK)
 
 
         else:  #client
@@ -234,8 +236,7 @@ def order_control(request,id):
             return Response({'Order send to delivery crew'},status.HTTP_200_OK)
 
         elif request.user.groups.filter(name='Delivery').exists():
-            ...
-
+            return Response({'only clients an managers can use POST'})
 
         else:  #client
             user = request.user
@@ -262,6 +263,8 @@ def order_control(request,id):
                 return Response(serialized_order.data, status=status.HTTP_201_CREATED)
 
 
+    if request.method == 'PATCH':
+        ...
     if request.method == 'DELETE':
         if request.user.groups.filter(name='Manager').exists():
 
