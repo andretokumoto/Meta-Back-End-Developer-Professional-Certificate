@@ -203,7 +203,11 @@ def order_control(request,id):
     if request.method == 'GET':
 
         if request.user.groups.filter(name='Manager').exists():
-            ...
+
+            orders = Order.objects.all()
+            serialized_orders = OrderSerializer(orders, many=True)
+            return Response(serialized_orders.data, status=status.HTTP_200_OK)
+
         elif request.user.groups.filter(name='Delivery').exists():
             ...
         else:  #client
