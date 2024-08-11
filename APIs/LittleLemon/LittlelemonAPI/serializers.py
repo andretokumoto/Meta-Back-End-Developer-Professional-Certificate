@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from decimal import Decimal
-from .models import Menuitem, Category
+from .models import Menuitem, Category, Cart
 import bleach
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
@@ -57,3 +57,8 @@ class MenuItemSerializar(serializers.ModelSerializer):
     
     def calculate_tax(self, product: Menuitem):
         return product.price * Decimal(1.1)
+
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = ['menuitem', 'quant', 'unit_price', 'price']

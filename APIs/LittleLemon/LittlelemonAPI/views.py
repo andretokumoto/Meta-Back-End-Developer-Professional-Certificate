@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view, throttle_classes ,permission_classes
-from .models import Menuitem, Category , ItemOfDay
-from .serializers import MenuItemSerializar,CategorySerializer,UserSerializer
+from .models import Menuitem, Category , ItemOfDay , Cart, Order
+from .serializers import MenuItemSerializar,CategorySerializer,UserSerializer, CartSerializer
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -162,3 +162,37 @@ def user_register(request):
         user_serializer.save()
         return Response({'User created'},status.HTTP_201_CREATED)
     return Response({'message':"Error"},status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','POST','DELETE'])
+@permission_classes([IsAuthenticated])
+def cart_control(request):
+
+    if request.method == 'GET':
+        cart_items = Cart.objects.filter(user=request.user)
+        serialized_cart_items = CartSerializer(cart_items, many=True)
+        return Response(serialized_cart_items.data, status=status.HTTP_200_OK)       
+
+    if request.method == 'POST':
+
+        menuitem_id = request.data.get('menuitem_id')
+        quant = request.data.get('quant')
+        menuitem = get_object_or_404(Menuitem, id=menuitem_id)
+        unit_price = menuitem.price
+        total_price = unit_price * quant
+
+        cart_item, created = Cart.objects.get_or_create(
+            user=request.user,
+            menuitem=menuitem,
+            defaults={'quant': quant, 'unit_price': unit_price, 'price': total_price}
+        )
+        
+        if not created:
+            cart_item.quant += quant
+            cart_item.price += total_price
+            cart_item.save()
+
+        return Response({'message':'Cart created'},status.HTTP_201_CREATED)
+    
+    if request.method == 'DELETE':
+        Cart.objects.filter(user=request.user).delete()
+        return Response({'message':'Cart Deleted'},status.HTTP_200_OK)
