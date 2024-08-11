@@ -199,7 +199,7 @@ def cart_control(request):
     
 @api_view(['GET','POST','DELETE'])
 @permission_classes([IsAuthenticated])
-def order_control(request):
+def order_control(request,id):
     
     if request.method == 'GET':
 
@@ -208,7 +208,11 @@ def order_control(request):
         elif request.user.groups.filter(name='Delivery').exists():
             ...
         else:  #client
-            orders = Order.objects.filter(user=request.user)
+            if id:
+                orders = Order.objects.get(id=id, user=request.user)
+            else:
+                orders = Order.objects.filter(user=request.user)
+                
             serialized_orders = OrderSerializer(orders, many=True)
             return Response(serialized_orders.data,status.HTTP_200_OK)
         
