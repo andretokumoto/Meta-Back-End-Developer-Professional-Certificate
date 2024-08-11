@@ -18,4 +18,7 @@ urlpatterns = [
     path('token/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('item-of-day',views.ItemOfDay),
+    path('cart/menu-items',views.cart_control),
+    path('orders/<int:id>',views.order_control),
+    path('orders',views.order_control),
 ]

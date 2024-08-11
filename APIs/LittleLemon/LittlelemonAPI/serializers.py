@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from decimal import Decimal
-from .models import Menuitem, Category, Cart
+from .models import Menuitem, Category, Cart, Order, OrderItem
 import bleach
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
@@ -59,6 +59,23 @@ class MenuItemSerializar(serializers.ModelSerializer):
         return product.price * Decimal(1.1)
 
 class CartSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Cart
         fields = ['menuitem', 'quant', 'unit_price', 'price']
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrderItem
+        fields = ['menuitem', 'quant', 'unit_price', 'price']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+
+    items = OrderItemSerializer(source='orderitem_set', many=True)
+    
+    class Meta:
+        model = Order
+        fields = ['id', 'status', 'total', 'date', 'items']

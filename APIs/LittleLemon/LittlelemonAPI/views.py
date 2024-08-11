@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view, throttle_classes ,permission_classes
 from .models import Menuitem, Category , ItemOfDay , Cart, Order
-from .serializers import MenuItemSerializar,CategorySerializer,UserSerializer, CartSerializer
+from .serializers import MenuItemSerializar,CategorySerializer,UserSerializer, CartSerializer, OrderSerializer
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -196,3 +196,22 @@ def cart_control(request):
     if request.method == 'DELETE':
         Cart.objects.filter(user=request.user).delete()
         return Response({'message':'Cart Deleted'},status.HTTP_200_OK)
+    
+@api_view(['GET','POST','DELETE'])
+@permission_classes([IsAuthenticated])
+def order_control(request):
+    
+    if request.method == 'GET':
+
+        if request.user.groups.filter(name='Manager').exists():
+            ...
+        elif request.user.groups.filter(name='Delivery').exists():
+            ...
+        else:  #client
+            orders = Order.objects.filter(user=request.user)
+            serialized_orders = OrderSerializer(orders, many=True)
+            return Response(serialized_orders.data,status.HTTP_200_OK)
+        
+
+    if request.method == 'POST':
+        ...
