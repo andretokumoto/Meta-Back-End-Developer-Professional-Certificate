@@ -213,7 +213,6 @@ def order_control(request,id):
             serialized_orders = OrderSerializer(orders, many=True)
             return Response(serialized_orders.data, status=status.HTTP_200_OK)
 
-
         else:  #client
             if id:
                 orders = Order.objects.get(id=id, user=request.user)
@@ -264,7 +263,15 @@ def order_control(request,id):
 
 
     if request.method == 'PATCH':
-        ...
+        if request.user.groups.filter(name='Delivery').exists():
+           order = Order.objects.get(id=id)
+           status_data = request.data.get('status')
+           order.status = status_data
+           order.save()
+           serialized_order = OrderSerializer(order)
+           return Response(serialized_order.data, status=status.HTTP_200_OK)
+
+
     if request.method == 'DELETE':
         if request.user.groups.filter(name='Manager').exists():
 
