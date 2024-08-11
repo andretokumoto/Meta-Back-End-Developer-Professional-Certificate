@@ -223,7 +223,14 @@ def order_control(request,id):
     if request.method == 'POST':
 
         if request.user.groups.filter(name='Manager').exists():
-            ...
+
+            order = Order.objects.get(id=id)
+            delivery_crew_id = request.data.get('delivery_crew_id')
+            delivery_crew = User.objects.get(id=delivery_crew_id)
+            order.delivery_crew = delivery_crew
+            order.save()
+            return Response({'Order send to delivery crew'},status.HTTP_200_OK)
+
         elif request.user.groups.filter(name='Delivery').exists():
             ...
         else:  #client
