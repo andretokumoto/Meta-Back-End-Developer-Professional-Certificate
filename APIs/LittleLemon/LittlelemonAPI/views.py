@@ -62,12 +62,22 @@ def single_item(request, id):
 @api_view(['GET','POST'])
 def item_of_day(request,id):
     if request.method == 'GET':
-        item = get_object_or_404(ItemOfDay)
-        serialized_item = MenuItemSerializar(item)
+        item = ItemOfDay.objects.first()
+        serialized_item = MenuItemSerializar(item.item)
         return Response(serialized_item.data,status.HTTP_200_OK)
+    
+    if request.method == 'POST':
+        if request.user.groups.filter(name='managers').exists():
+            item_id = request.data.get('item_id')
+            item = get_object_or_404(Menuitem, pk=item_id)
+            item_of_day = ItemOfDay.objects.get_or_create(id=1, defaults={'item': item})
+            item_of_day.item = item
+            item_of_day.save()
+            serialized_item = MenuItemSerializar(item_of_day.item)
+            return Response({'Item created',status.HTTP_201_CREATED}) 
 
+    return Response({'message':'Error'},status.HTTP_400_BAD_REQUEST)
 
-     
 @api_view()
 @throttle_classes([AnonRateThrottle])
 def throttle_check(request):

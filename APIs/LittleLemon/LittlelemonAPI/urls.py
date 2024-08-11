@@ -17,5 +17,5 @@ urlpatterns = [
     path('register',views.user_register),
     path('token/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('Item-of-day',views.ItemOfDay),
+    path('item-of-day',views.ItemOfDay),
 ]
