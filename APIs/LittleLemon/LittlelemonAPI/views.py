@@ -1,11 +1,10 @@
 from django.shortcuts import get_object_or_404
-#from django.http import JsonResponse
-#from django.views import View
+import datetime
 from rest_framework.response import Response
 from rest_framework import status,viewsets
 from rest_framework.decorators import api_view, throttle_classes ,permission_classes
 from .models import Menuitem, Category , ItemOfDay , Cart, Order
-from .serializers import MenuItemSerializar,CategorySerializer,UserSerializer, CartSerializer, OrderSerializer
+from .serializers import MenuItemSerializar,CategorySerializer,UserSerializer, CartSerializer, OrderSerializer, OrderItem
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
@@ -212,10 +211,37 @@ def order_control(request,id):
                 orders = Order.objects.get(id=id, user=request.user)
             else:
                 orders = Order.objects.filter(user=request.user)
-                
+
             serialized_orders = OrderSerializer(orders, many=True)
             return Response(serialized_orders.data,status.HTTP_200_OK)
         
 
     if request.method == 'POST':
-        ...
+
+        if request.user.groups.filter(name='Manager').exists():
+            ...
+        elif request.user.groups.filter(name='Delivery').exists():
+            ...
+        else:  #client
+            user = request.user
+            cart_items = Cart.objects.filter(user=user)
+            total = sum(item.price for item in cart_items)
+            order = Order.objects.create(user=user, total=total, status=False, date= datetime.date.today())
+
+            order_items = []
+            for cart_item in cart_items:
+                order_item = OrderItem(
+                    order=order,
+                    menuitem=cart_item.menuitem,
+                    quant=cart_item.quant,
+                    unit_price=cart_item.unit_price,
+                    price=cart_item.price
+                )
+                order_items.append(order_item)
+
+                OrderItem.objects.bulk_create(order_items)
+
+                cart_items.delete()
+
+                serialized_order = OrderSerializer(order)
+                return Response(serialized_order.data, status=status.HTTP_201_CREATED)
