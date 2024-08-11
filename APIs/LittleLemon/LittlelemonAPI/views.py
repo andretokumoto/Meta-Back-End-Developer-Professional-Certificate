@@ -210,6 +210,8 @@ def order_control(request,id):
 
         elif request.user.groups.filter(name='Delivery').exists():
             ...
+
+
         else:  #client
             if id:
                 orders = Order.objects.get(id=id, user=request.user)
@@ -233,6 +235,8 @@ def order_control(request,id):
 
         elif request.user.groups.filter(name='Delivery').exists():
             ...
+
+
         else:  #client
             user = request.user
             cart_items = Cart.objects.filter(user=user)
@@ -256,3 +260,11 @@ def order_control(request,id):
 
                 serialized_order = OrderSerializer(order)
                 return Response(serialized_order.data, status=status.HTTP_201_CREATED)
+
+
+    if request.method == 'DELETE':
+        if request.user.groups.filter(name='Manager').exists():
+
+            order = Order.objects.get(id=id)
+            order.delete()
+            return Response({'Order dleted'},status.HTTP_200_OK)
