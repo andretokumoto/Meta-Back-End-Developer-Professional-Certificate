@@ -1,0 +1,6 @@
+
+para ativar o env:   cmd /k env\Scripts\activate.bat
+
+para desativar: deactivate
+
+para rodar o server: python manage.py runserver
