@@ -1,11 +1,12 @@
 from django import forms
 
-FAVORITE_DISH = [
-    ('italian','Italian'),
-    ('brasilian','Brasilian'),
+SHIFTS = [
+    ('1','Morning'),
+    ('2','Afternoon'),
 ]
 
-class DemoForm(forms.Form):
-    name = forms.CharField()
-    email = forms.EmailField()
-    favorite_dish = forms.ChoiceField(choices=FAVORITE_DISH)
+class InputForm(forms.Form):
+    first_name = forms.CharField(max_length=200)
+    first_last = forms.CharField(max_length=200)
+    shift = forms.ChoiceField(choices=SHIFTS)
+    time_log = forms.TimeField()
