@@ -8,7 +8,7 @@ class Menu(models.Model):
     price = models.FloatField(null=False)
     category_id = models.ForeignKey(Menu_category, on_delete=models.PROTECT, default=None, related_name="category_name")
     
-'''class Menuitens(models.Model):
-    item_name = models.CharField(max_length=200)
-    category = models.CharField(max_length=200)
-    year = models.IntegerField()'''
+class Logger(models.Model):
+    first_name = models.CharField(max_length=200)
+    first_last = models.CharField(max_length=200)
+    time_log = models.TimeField(help_text='entre com o tempo exato')
