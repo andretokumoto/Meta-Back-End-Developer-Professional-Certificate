@@ -14,3 +14,6 @@ def form_view(request):
     return render(request, 'menuAPP/home.html', context)
 
 
+def menu(request):
+    menuitem = {'name':'Burrito'}
+    return render(request, 'menu.html', menuitem)
