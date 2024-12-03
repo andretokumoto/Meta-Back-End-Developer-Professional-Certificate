@@ -12,6 +12,14 @@ https://www.coursera.org/professional-certificates/meta-back-end-developer
 
    - Course Version Control: https://www.coursera.org/account/accomplishments/verify/MK9ASLKA6P61
 
+   - Course Introduction to Databases for Back-End Development:
+
    - Course Django web Framework: https://www.coursera.org/account/accomplishments/verify/O5BYK5F2ZKDY
 
    - Course APIs : https://coursera.org/share506ccd3d8042e614e6ec0fefa9e70b54 
+
+   - Course The Full Stack:
+
+   - Course Back-End Developer Capstone:
+
+   - Coding Interview Preparation: 
