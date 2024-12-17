@@ -73,6 +73,7 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+#change password to the db password
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
