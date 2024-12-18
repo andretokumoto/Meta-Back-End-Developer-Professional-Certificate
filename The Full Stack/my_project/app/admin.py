@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import UserComents
 
-# Register your models here.
+# Registrar o modelo UserComents no admin
+admin.site.register(UserComents)
