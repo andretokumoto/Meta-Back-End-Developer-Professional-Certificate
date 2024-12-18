@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section>
+  <article>
+    <h1>Bookings</h1>
+
+    <!--Begin row-->
+    <div class="row">
+      <!--Begin col-->
+      <div class="column">
+        <!-- Your content here -->
+      </div>
+      <!--End col-->
+
+      <!--Begin col-->
+      <div class="column">
+        <!-- Your content here -->
+      </div>
+      <!--End col-->
+    </div>
+    <!--End row-->
+
+  </article>
+</section>
+<!-- Adicione seu código dentro das tags de script abaixo -->
+<script>
+    // Crie uma constante chamada bookings e atribua a ela o valor da função parse() chamada em JSON
+    const bookings = JSON.parse('{{ bookings|safe }}');
+    
+    // Chame a função log() no console e passe bookings para ela como um argumento
+    console.log(bookings);
+    
+    // Crie uma constante chamada pretty_json e atribua a ela o valor de stringify() chamada no console
+    const pretty_json = JSON.stringify(bookings, null, 2);
+    
+    // Log the pretty JSON to the console
+    console.log(pretty_json);
+</script>
+{% endblock %}
