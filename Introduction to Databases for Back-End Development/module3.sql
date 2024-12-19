@@ -20,3 +20,6 @@ ORDER BY salary;
 
 SELECT * FROM employees
 ORDER BY salary DESC;
+
+SELECT DISTINCT salary
+FROM employees;
