@@ -29,3 +29,24 @@ CREATE TABLE card_order(
     FOREIGN KEY(product_id) REFERENCES product(product_id)
 
 );
+
+CREATE TABLE tbl( 
+
+    table_id INT, 
+    location VARCHAR(255), 
+    PRIMARY KEY (table_id) 
+); 
+
+CREATE TABLE reservation( 
+
+    reservation_id INT, 
+    date_time DATETIME, 
+    no_of_pax INT, 
+    order_id INT, 
+    table_id INT, 
+    custumer_id INT, 
+    PRIMARY KEY (reservation_id), 
+    FOREIGN KEY (order_id) REFERENCES card_order(order_id), 
+    FOREIGN KEY (table_id) REFERENCES tbl(table_id), 
+    FOREIGN KEY (custumer_id) REFERENCES custumer(custumer_id) 
+); 
