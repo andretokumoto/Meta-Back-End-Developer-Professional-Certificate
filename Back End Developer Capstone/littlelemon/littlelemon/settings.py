@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'littlelemonAPI',
 ]
 
@@ -52,6 +55,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'littlelemon.urls'
+
+DJOSER={"USER_ID_FIELD":"username"}
 
 TEMPLATES = [
     {
