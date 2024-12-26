@@ -19,5 +19,6 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('restaurant/', include('littlelemonAPI.urls'))
+    path('restaurant/', include('littlelemonAPI.urls')),
+    path('restaurant/menu/',include('littlelemonAPI.urls')),
 ]
